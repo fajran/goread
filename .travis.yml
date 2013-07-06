@@ -1,0 +1,21 @@
+language: go
+before_install:
+- sudo apt-get install mercurial -y
+- pushd $HOME
+- wget -q http://googleappengine.googlecode.com/files/go_appengine_sdk_linux_amd64-1.8.1.zip
+- unzip -q go_appengine_sdk_linux_amd64-1.8.1.zip
+- cd google_appengine
+- export GAE=$PWD
+- export PATH=$GAE:$PATH
+- popd
+install:
+- cd $TRAVIS_BUILD_DIR
+- export GOPATH=$PWD
+- cd goapp
+- go get -d || /bin/true # FIXME: imports goapp/atom: unrecognized import path "goapp/atom"
+- cd ../src ; ln -s ../goapp # FIXME
+script:
+- cd $TRAVIS_BUILD_DIR
+- cd goapp
+- go test -v ./...
+
