@@ -75,6 +75,9 @@ ul.feed-list li > span.title:first-child {
 ul.feed-list li.feed {
 	padding-left: 40px;
 }
+ul.feed-list li.feed.root {
+	padding-left: 8px;
+}
 ul.feed-list span.title.unread {
 	font-weight: bold;
 }
@@ -161,4 +164,8 @@ ul.story-list li.mark-read p {
 	font-size: 12px;
 }
 
+#loading {
+	height: 200px;
+	padding: 10px;
+}
 

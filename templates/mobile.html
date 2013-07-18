@@ -6,7 +6,11 @@
 <link href="{{.BootstrapCss}}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/css/mobile.css"/>
 </head>
-<body class="ng-cloak">
+<body class="ng-cloak"
+	data-url-feeds="/static/list-feeds.json"
+	data-url-feeds-orig="{{url "list-feeds"}}"
+	ng-controller="MainController"
+	ng-init="init()">
 
 <div class="header">
 	<div class="brand">go read</div>
@@ -24,7 +28,10 @@
 </div>
 
 <div class="nav top">
-	<div class="btn btn-small pull-left btn-back">&laquo; Feeds</div>
+	<div class="btn btn-small pull-left btn-back"
+		ng-show="backButton"
+		ng-bind="backButton.label"
+		ng-click="backButtonClick()"></div>
 	<div class="pull-right">
 		<div class="btn btn-small" id="btn-refresh"><i class="icon-repeat"></i></div>
 		<div class="btn-group">
@@ -39,11 +46,13 @@
 			</ul>
 		</div>
 	</div>
-	<div class="title">Title</div>
+	<div class="title" ng-bind="title"></div>
 </div>
 
 <div class="content">
 
+<!-- story list -->
+<div id="story-list" ng-show="!loading && mode=='story'" ng-controller="StoryController">
 <ul class="story-list">
 <li>
 	<div class="meta">
@@ -110,43 +119,49 @@
 	<p><a href="#">Mark these items as read</a></p>
 </li>
 </ul>
+</div><!-- // story list -->
 
+<!-- feed list -->
+<div id="feed-list" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list">
-<li>
+<li ng-hide="current"
+	ng-click="showAllItems()">
 	<i class="icon-folder-open"></i>
 	<span class="title unread">All items</span>
 	<span class="count">100+</span>
 </li>
-<li>
+<li ng-hide="current">
 	<span class="title">Read items</span>
 	<span class="count">100+</span>
 </li>
-<li>
-	<i class="icon-star"></i>
-	<span class="title">Starred items</span>
+<li
+	ng-click="showFolder(current)"
+	ng-show="current">
+	<i class="icon-folder-open"></i>
+	<span class="title" ng-bind="current.Title"></span>
 </li>
-<li class="feed">
-	<i class="icon-th"></i>
-	<span class="title">Feed title</span>
-</li>
-<li class="feed">
-	<i class="icon-th"></i>
-	<span class="title unread">Feed title</span>
-</li>
-<li class="feed">
-	<i class="icon-th"></i>
-	<span class="title">Feed title</span>
-</li>
-<li class="feed">
-	<i class="icon-th"></i>
-	<span class="title">Feed title</span>
+<li
+	ng-repeat="feed in feeds"
+	ng-click="activate(feed)"
+	ng-class="{'feed':!feed.Outline, 'root':!current}">
+	<i ng-class="{'icon-th':!feed.Outline, 'icon-folder-open':feed.Outline}"></i>
+	<span class="title" ng-bind="feed.Title"></span>
 </li>
 </ul>
+</div><!-- //feed-list -->
 
+<!-- loading -->
+<div id="loading" ng-show="loading">
+	<p>loading..</p>
 </div>
 
+</div><!-- //content -->
+
 <div class="nav bottom">
-	<div class="btn btn-small pull-left btn-back">&laquo; Feeds</div>
+	<div class="btn btn-small pull-left btn-back"
+		ng-show="backButton"
+		ng-bind="backButton.label"
+		ng-click="backButtonClick()"></div>
 </div>
 
 	<script src="{{.Jquery}}"></script>
