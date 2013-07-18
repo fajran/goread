@@ -44,6 +44,7 @@ func init() {
 	if templates, err = template.New("").Funcs(funcs).
 		ParseFiles(
 		"templates/base.html",
+		"templates/mobile.html",
 		"templates/story.html",
 		"templates/admin-all-feeds.html",
 		"templates/admin-date-formats.html",
@@ -100,9 +101,14 @@ func init() {
 func Main(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	feed := r.FormValue("f")
 	story := r.FormValue("s")
+	mobile := r.FormValue("m")
 	cu := user.Current(c)
 	if len(feed) == 0 || len(story) == 0 || cu != nil {
-		if err := templates.ExecuteTemplate(w, "base.html", includes(c, w, r)); err != nil {
+		template := "base.html"
+		if mobile == "1" {
+			template = "mobile.html"
+		}
+		if err := templates.ExecuteTemplate(w, template, includes(c, w, r)); err != nil {
 			c.Errorf("%v", err)
 			serveError(w, err)
 		}
