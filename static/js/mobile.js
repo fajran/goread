@@ -499,7 +499,12 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 				$scope.scheduleReadStatus(story);
 			}
 		}
-		$scope.setVisibility('unread');
+		if ($scope.visibility == 'unread') {
+			$scope.reload();
+		}
+		else {
+			$scope.setVisibility('unread');
+		}
 	}
 }]);
 
