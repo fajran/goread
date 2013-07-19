@@ -144,7 +144,7 @@ app.controller('MainController', function($scope, $http) {
 app.controller('FeedController', function($scope) {
 	$scope.feeds = undefined;
 	$scope.current = undefined;
-	$scope.isRoot = true;
+	$scope.isTop = true;
 
 	$scope.$watch('opml', function(value) {
 		if ($scope.mode != 'feed') return;
@@ -187,7 +187,7 @@ app.controller('FeedController', function($scope) {
 
 	$scope.setCurrent = function(feed) {
 		$scope.current = feed;
-		$scope.isRoot = feed == $scope.opml;
+		$scope.isTop = feed == $scope.opml;
 
 		if (feed == $scope.opml) {
 			$scope.feeds = $scope.opml;

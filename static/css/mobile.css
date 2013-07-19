@@ -52,37 +52,38 @@ body, html {
 	line-height: 26px;
 }
 
+/** feed list **/
+
 ul.feed-list {
 	list-style: none;
-	padding: 0px;
 	margin: 0px;
+	padding: 0px;
 	min-height: 200px;
 }
-ul.feed-list li {
-	height: 40px;
-	line-height: 40px;
-	padding: 0 8px;
+ul.feed-list > li {
+	padding: 10px;
 	border-bottom: 1px solid #ccc;
 	cursor: pointer;
+	line-height: 22px;
 }
-ul.feed-list li > span.count {
-	float: right;
+ul.feed-list > li > i {
+	float: left;
+	margin-top: 4px;
 }
-ul.feed-list li > span.title {
-	margin-left: 5px;
-}
-ul.feed-list li > span.title:first-child {
+ul.feed-list > li > span.title {
 	margin-left: 25px;
+	display: block;
+	margin-right: 50px;
 }
-ul.feed-list li.feed {
-	padding-left: 40px;
+ul.feed-list > li > span.count {
+	float: right;
+	color: #888;
 }
-ul.feed-list li.feed.root {
-	padding-left: 8px;
+ul.feed-list.in > li.feed {
+	padding-left: 34px;
 }
-ul.feed-list span.title.unread {
-	font-weight: bold;
-}
+
+/** story list **/
 
 ul.story-list {
 	list-style: none;
