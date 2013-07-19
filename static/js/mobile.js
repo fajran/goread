@@ -283,6 +283,11 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.reload();
 	});
 
+	$scope.$watch('visibility', function(value) {
+		if ($scope.mode != 'story') return;
+		$scope.reload();
+	});
+
 	$scope.updateBackButton = function() {
 		$scope.setBackCallback('&laquo; Feeds', function() {
 			$scope.setMode('feed');
