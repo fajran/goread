@@ -58,19 +58,27 @@ app.controller('MainController', function($scope, $http) {
 		$scope.loadFeeds();
 	}
 
-	$scope.loadFeeds = function(cb) {
+	$scope.loadFeeds = function() {
+		$scope.refresh(function() {
+			$scope.setLoaded();
+			$scope.setMode('feed');
+		});
+	}
+
+	$scope.refresh = function(cb) {
 		cb = cb || function() {};
 
+		$scope.loading++;
 		$http.get($scope.url.feeds)
 			.success(function(data) {
 				$scope.opml = data.Opml;
 				$scope.stories = data.Stories;
 
-				// TODO: move this out
-				$scope.setLoaded();
-				$scope.setMode('feed');
+				$scope.loading--;
+				cb();
 			})
 			.error(function(data, status) {
+				$scope.loading--;
 				// TODO
 			});
 	}
