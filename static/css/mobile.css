@@ -91,13 +91,13 @@ ul.story-list {
 	margin: 0px;
 	min-height: 200px;
 }
-ul.story-list li {
+ul.story-list > li {
 	min-height: 40px;
 	border: 2px solid #fff;
 	border-top: 1px solid #ccc;
 	cursor: pointer;
 }
-ul.story-list li.open {
+ul.story-list > li.open {
 	cursor: default;
 }
 ul.story-list .head {
@@ -126,17 +126,17 @@ ul.story-list .meta p {
 ul.story-list .story.unread .meta .title {
 	font-weight: bold;
 }
-ul.story-list li.story {
+ul.story-list > li.story {
 	background: #eee;
 	border-color: #eee;
 	border-top-color: #ccc;
 }
-ul.story-list li.story.unread {
+ul.story-list > li.story.unread {
 	background: #fff;
 	border-color: #fff;
 	border-top-color: #ccc;
 }
-ul.story-list li.story.open {
+ul.story-list > li.story.open {
 	background: #fff;
 	border: 2px solid #f00;
 }
@@ -170,20 +170,20 @@ ul.story-list .action label {
 	margin: 0px;
 	font-size: 12px;
 }
-ul.story-list li.mark-read {
+ul.story-list > li.mark-read {
 	border: 0px;
 }
-ul.story-list li.more {
+ul.story-list > li.more {
 	padding: 8px;
 }
-ul.story-list li.more p {
+ul.story-list > li.more p {
 	margin: 0;
 	font-size: 12px;
 }
-ul.story-list li.more p a {
+ul.story-list > li.more p a {
 	font-size: 14px;
 }
-ul.story-list li.mark-read p {
+ul.story-list > li.mark-read p {
 	text-align: right;
 	margin: 16px 8px 8px 8px;
 	font-size: 12px;
