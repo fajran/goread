@@ -103,6 +103,7 @@ ul.story-list .closer .next {
 	float: right;
 	height: 30px;
 	line-height: 30px;
+	cursor: pointer;
 }
 ul.story-list .meta {
 	padding: 4px 8px;

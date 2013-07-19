@@ -311,6 +311,12 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.activeStory = undefined;
 	}
 
+	$scope.showIndex = function(index) {
+		if (index<0 || index>=$scope.stories.length) return;
+		var story = $scope.stories[index];
+		$scope.show(story);
+	}
+
 	$scope.loadMore = function() {
 		$scope.limit = Math.min($scope.limit + 10, $scope.totalItems);
 		$scope.updateStories();
