@@ -352,6 +352,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 		var stories = $scope.stories.slice();
 		for (var i=stories.length; i<$scope.limit; i++) {
+			var next = undefined;
 			var idx = -1;
 			for (var j=0; j<len; j++) {
 				while (pos[j] < stream[j].stories.length) {
@@ -362,25 +363,27 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 						continue;
 					}
 
-					if (idx < 0) {
+					if (!next) {
+						next = story;
+						next.feed = stream[j].feed;
 						idx = j;
 					}
 					else {
-						if (story.Date < stream[idx].stories[pos[idx]].Date) {
+						if (story.Date < next.Date) {
+							next = story;
+							next.feed = stream[j].feed;
 							idx = j;
 						}
 					}
 					break;
 				}
 			}
-			if (idx<0) break;
+			if (!next) break;
 
-			var story = stream[idx].stories[pos[idx]];
-			story.feed = stream[idx].feed;
-			if (story.Unread === undefined) {
-				story.Unread = true; // FIXME get the unread status
+			if (next.Unread === undefined) {
+				next.Unread = true; // FIXME get the unread status
 			}
-			stories.push(story);
+			stories.push(next);
 			pos[idx]++;
 		}
 
