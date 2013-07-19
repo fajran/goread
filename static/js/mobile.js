@@ -261,6 +261,12 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	$scope.contents = {};
 	$scope.readStatusChanges = [];
 
+	$scope.$watch('$parent.stories', function(value) {
+		if ($scope.mode != 'story') return;
+		if (!value) return;
+		$scope.reload();
+	});
+
 	$scope.$watch('mode', function(value) {
 		if (value != 'story') return;
 		$scope.reload();
