@@ -263,17 +263,23 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 	$scope.$watch('mode', function(value) {
 		if (value != 'story') return;
+		$scope.reload();
+	});
 
+	$scope.updateBackButton = function() {
 		$scope.setBackCallback('&laquo; Feeds', function() {
 			$scope.setMode('feed');
 		});
+	}
 
+	$scope.reload = function() {
+		$scope.updateBackButton();
 		if (!$scope.activeFeed) return;
 
 		$scope.reset();
-		$scope.load();
+		$scope.prepareFeeds();
 		$scope.resetScroll();
-	});
+	};
 
 	$scope.reset = function() {
 		$scope.stories = [];
@@ -281,7 +287,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.activeStory = undefined;
 	}
 
-	$scope.load = function() {
+	$scope.prepareFeeds = function() {
 		$scope.feeds = collectFeeds($scope.activeFeed);
 		$scope.updateStream();
 		$scope.limit = Math.min(10, $scope.totalItems);
