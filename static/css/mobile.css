@@ -56,12 +56,14 @@ ul.feed-list {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
+	min-height: 200px;
 }
 ul.feed-list li {
 	height: 40px;
 	line-height: 40px;
 	padding: 0 8px;
 	border-bottom: 1px solid #ccc;
+	cursor: pointer;
 }
 ul.feed-list li > span.count {
 	float: right;
@@ -86,24 +88,29 @@ ul.story-list {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
+	min-height: 200px;
 }
 ul.story-list li {
 	min-height: 40px;
 	border: 2px solid #fff;
 	border-top: 1px solid #ccc;
+	cursor: pointer;
 }
-ul.story-list .closer {
+ul.story-list li.open {
+	cursor: default;
+}
+ul.story-list .head {
 	background: #eee;
 	height: 30px;
 	line-height: 30px;
 	padding: 0 8px;
 	font-size: 12px;
+	cursor: pointer;
 }
-ul.story-list .closer .next {
+ul.story-list .head .next {
 	float: right;
 	height: 30px;
 	line-height: 30px;
-	cursor: pointer;
 }
 ul.story-list .meta {
 	padding: 4px 8px;
@@ -134,6 +141,7 @@ ul.story-list li.story.open {
 }
 ul.story-list .content {
 	padding: 0 8px;
+	cursor: default;
 }
 ul.story-list .meta .feed-title,
 ul.story-list .meta .excerpt,

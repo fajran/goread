@@ -61,14 +61,14 @@
 	class="story"
 	ng-class="{'open':story==activeStory, 'unread':story.Unread}"
 	ng-click="show(story)">
-	<div class="closer"
+	<div class="head"
 		ng-click="hide()" eat-click
 		ng-show="story==activeStory">
 		<p class="next" ng-hide="$last"
 			ng-click="showIndex($index+1)" eat-click>
 			<i class="icon-arrow-down"></i> Next item
 		</p>
-		<p><i class="icon-th-large"></i> Collapse</p>
+		<p class="collapser"><i class="icon-th-large"></i> Collapse</p>
 	</div>
 	<div class="meta">
 		<p>
