@@ -14,6 +14,10 @@ app.config(function($locationProvider) {
 	return $locationProvider.html5Mode(true);
 });
 
+app.filter('encodeURI', function() {
+	return encodeURIComponent;
+});
+
 app.directive('eatClick', function() {
 	return function(scope, element, attrs) {
 		$(element).click(function(event) {

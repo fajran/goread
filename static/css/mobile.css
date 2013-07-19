@@ -139,6 +139,10 @@ ul.story-list .action {
 ul.story-list .action span {
 	margin-right: 10px;
 }
+ul.story-list .action a {
+	text-decoration: none;
+	color: black;
+}
 ul.story-list .action input,
 ul.story-list .action label {
 	display: inline;

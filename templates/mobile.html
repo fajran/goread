@@ -89,7 +89,11 @@
 			<input type="checkbox" id="unread-XXX"/>
 			<label for="unread-XXX">Keep unread</label>
 		</span>
-		<span><i class="icon-envelope"></i> Email</span>
+		<span class="email">
+			<a ng-href="mailto:?subject={{`{{story.Title | encodeURI}}`}}&body={{`{{story.Link | encodeURI}}`}}">
+				<i class="icon-envelope"></i> Email
+			</a>
+		</span>
 	</div>
 </li>
 <li class="load more"
