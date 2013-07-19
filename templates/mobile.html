@@ -43,10 +43,16 @@
 				<i class="icon-chevron-down"></i>
 			</a>
 			<ul class="dropdown-menu">
-			<li><a href="">show all</a></li>
-			<li><a href="">show updated</a></li>
+			<li ng-click="setVisibility('all')"><a href="">
+				<i ng-class="{'icon-ok':visibility=='all', 'icon-':visibility=='unread'}"></i>
+				show all
+			</a></li>
+			<li ng-click="setVisibility('unread')"><a href="">
+				<i ng-class="{'icon-ok':visibility=='unread', 'icon-':visibility=='all'}"></i>
+				show updated
+			</a></li>
 			<li class="divider"></li>
-			<li><a href="">add subscription</a></li>
+			<li><a href=""><i class="icon-"></i> add subscription</a></li>
 			</ul>
 		</div>
 	</div>

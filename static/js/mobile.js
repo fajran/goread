@@ -30,6 +30,7 @@ app.controller('MainController', function($scope, $http) {
 	$scope.loading = 1;
 	$scope.title = ''
 	$scope.activeFeed = undefined;
+	$scope.visibility = 'unread';
 
 	$scope.setLoaded = function() {
 		$scope.loading = 0;
@@ -132,6 +133,11 @@ app.controller('MainController', function($scope, $http) {
 			$scope.setTitle(feed.Title)
 		}
 		$scope.setMode('story');
+	}
+
+	// visibility
+	$scope.setVisibility = function(visibility) {
+		$scope.visibility = visibility;
 	}
 });
 
