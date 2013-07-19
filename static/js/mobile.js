@@ -256,6 +256,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	$scope.limit = 10;
 	$scope.stories = [];
 	$scope.activeStory = undefined;
+	$scope.pos = undefined;
 	$scope.totalItems = 0;
 	$scope.hasMoreItems = false;
 	$scope.contents = {};
@@ -298,6 +299,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.stories = [];
 		$scope.contents = {};
 		$scope.activeStory = undefined;
+		$scope.pos = undefined;
 	}
 
 	$scope.prepareFeeds = function() {
@@ -329,11 +331,14 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		var stream = $scope.stream;
 		var len = stream.length;
 
-		var pos = [];
-		for (var i=0; i<len; i++) pos.push(0);
+		var pos = $scope.pos;
+		if (pos === undefined) {
+			pos = [];
+			for (var i=0; i<len; i++) pos.push(0);
+		}
 
-		var stories = [];
-		for (var i=0; i<$scope.limit; i++) {
+		var stories = $scope.stories.slice();
+		for (var i=stories.length; i<$scope.limit; i++) {
 			var idx = -1;
 			for (var j=0; j<len; j++) {
 				var p = pos[j];
@@ -357,6 +362,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 			pos[idx]++;
 		}
 
+		$scope.pos = pos;
 		$scope.stories = stories;
 		$scope.hasMoreItems = $scope.limit < $scope.totalItems;
 	}
