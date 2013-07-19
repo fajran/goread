@@ -9,6 +9,8 @@
 <body class="ng-cloak"
 	data-url-feeds="/static/list-feeds.json"
 	data-url-contents="{{url "get-contents"}}"
+	data-url-mark-read="{{url "mark-read"}}"
+	data-url-mark-unread="{{url "mark-unread"}}"
 	data-url-feeds-orig="{{url "list-feeds"}}"
 	ng-controller="MainController"
 	ng-init="init()">
@@ -56,7 +58,8 @@
 <div id="story-list" ng-show="!loading && mode=='story'" ng-controller="StoryController">
 <ul class="story-list">
 <li ng-repeat="story in stories"
-	ng-class="{'open':story==activeStory}"
+	class="story"
+	ng-class="{'open':story==activeStory, 'unread':story.Unread}"
 	ng-click="show(story)">
 	<div class="closer"
 		ng-click="hide()" eat-click
@@ -86,8 +89,12 @@
 	</div>
 	<div class="action" ng-show="story==activeStory">
 		<span>
-			<input type="checkbox" id="unread-XXX"/>
-			<label for="unread-XXX">Keep unread</label>
+			<label>
+				<input type="checkbox"
+					ng-model="story.Unread"
+					ng-change="toggleRead(story)"/>
+				Keep unread
+			</label>
 		</span>
 		<span class="email">
 			<a ng-href="mailto:?subject={{`{{story.Title | encodeURI}}`}}&body={{`{{story.Link | encodeURI}}`}}">

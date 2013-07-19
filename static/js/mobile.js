@@ -35,10 +35,21 @@ app.controller('MainController', function($scope, $http) {
 		$scope.loading = 0;
 	}
 
+	$scope.http = function(method, url, data) {
+		return $http({
+			method: method,
+			url: url,
+			data: $.param(data || ''),
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		});
+	};
+
 	function collectUrls() {
 		$scope.url = {
 			feeds: $('body').data('url-feeds'),
-			contents: $('body').data('url-contents')
+			contents: $('body').data('url-contents'),
+			markRead: $('body').data('url-mark-read'),
+			markUnread: $('body').data('url-mark-unread'),
 		}
 	}
 
@@ -207,6 +218,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	$scope.totalItems = 0;
 	$scope.hasMoreItems = false;
 	$scope.contents = {};
+	$scope.readStatusChanges = [];
 
 	$scope.$watch('mode', function(value) {
 		if (value != 'story') return;
@@ -278,6 +290,9 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 			var story = stream[idx].stories[pos[idx]];
 			story.feed = stream[idx].feed;
+			if (story.Unread === undefined) {
+				story.Unread = true; // FIXME get the unread status
+			}
 			stories.push(story);
 			pos[idx]++;
 		}
@@ -287,7 +302,9 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.show = function(story) {
+		if ($scope.activeStory == story) return;
 		$scope.activeStory = story;
+		$scope.setRead(story);
 	}
 
 	$scope.hide = function() {
@@ -325,6 +342,59 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 					$scope.setContent(items[i].Feed, items[i].Story, data[i]);
 				}
 			});
+	}
+
+	$scope.updateReadStatus = _.debounce(function() {
+		// FIXME is race condition possible?
+		var changes = $scope.readStatusChanges.slice();
+		$scope.readStatusChanges = [];
+
+		var unread = [];
+		var read = [];
+
+		var added = {};
+		for (var i=changes.length-1; i>=0; i--) {
+			var item = changes[i];
+			var key = [item.Feed, item.Story];
+			if (!(key in added)) {
+				added[key] = true;
+				if (item.Unread) unread.push(item);
+				else read.push(item);
+			}
+		}
+
+		// TODO batch mark unread/read
+		angular.forEach(unread, function(item) {
+			$scope.http('POST', $scope.url.markUnread, {
+				feed: item.Feed,
+				story: item.Story
+			});
+		});
+		angular.forEach(read, function(item) {
+			$scope.http('POST', $scope.url.markRead, {
+				feed: item.Feed,
+				story: item.Story
+			});
+		});
+	}, 2000);
+
+	$scope.setRead = function(story) {
+		if (!story.Unread) return;
+		story.Unread = false;
+		$scope.scheduleReadStatus(story);
+	}
+
+	$scope.scheduleReadStatus = function(story) {
+		$scope.readStatusChanges.push({
+			Feed: story.feed.XmlUrl,
+			Story: story.Id,
+			Unread: story.Unread
+		});
+		$scope.updateReadStatus();
+	}
+
+	$scope.toggleRead = function(story) {
+		$scope.scheduleReadStatus(story);
 	}
 }]);
 

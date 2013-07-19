@@ -92,9 +92,6 @@ ul.story-list li {
 	border: 2px solid #fff;
 	border-top: 1px solid #ccc;
 }
-ul.story-list li.open {
-	border: 2px solid #f00;
-}
 ul.story-list .closer {
 	background: #eee;
 	height: 30px;
@@ -117,8 +114,22 @@ ul.story-list .meta i {
 ul.story-list .meta p {
 	margin: 0;
 }
-ul.story-list .meta .title.unread {
+ul.story-list .story.unread .meta .title {
 	font-weight: bold;
+}
+ul.story-list li.story {
+	background: #eee;
+	border-color: #eee;
+	border-top-color: #ccc;
+}
+ul.story-list li.story.unread {
+	background: #fff;
+	border-color: #fff;
+	border-top-color: #ccc;
+}
+ul.story-list li.story.open {
+	background: #fff;
+	border: 2px solid #f00;
 }
 ul.story-list .content {
 	padding: 0 8px;
