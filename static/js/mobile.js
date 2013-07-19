@@ -213,15 +213,24 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 		if (!$scope.activeFeed) return;
 
+		$scope.reset();
+		$scope.load();
+		$scope.resetScroll();
+	});
+
+	$scope.reset = function() {
 		$scope.stories = [];
 		$scope.contents = {};
+		$scope.activeStory = undefined;
+	}
+
+	$scope.load = function() {
 		$scope.feeds = collectFeeds($scope.activeFeed);
 		$scope.updateStream();
 		$scope.limit = Math.min(10, $scope.totalItems);
 		$scope.updateStories();
 		$scope.updateContents();
-		$scope.resetScroll();
-	});
+	}
 
 	$scope.updateStream = function() {
 		var source = $scope.$parent.stories;
