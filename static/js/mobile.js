@@ -267,6 +267,10 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.reload();
 	});
 
+	$scope.$watch('opml', function(value) {
+		$scope.setMode('feed');
+	}, true);
+
 	$scope.$watch('mode', function(value) {
 		if (value != 'story') return;
 		$scope.reload();
@@ -280,7 +284,10 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 	$scope.reload = function() {
 		$scope.updateBackButton();
-		if (!$scope.activeFeed) return;
+		if (!$scope.activeFeed) {
+			$scope.setMode('feed');
+			return;
+		}
 
 		$scope.reset();
 		$scope.prepareFeeds();
