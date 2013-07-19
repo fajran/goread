@@ -343,18 +343,29 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 			for (var i=0; i<len; i++) pos.push(0);
 		}
 
+		var showRead = $scope.visibility == 'all';
+
 		var stories = $scope.stories.slice();
 		for (var i=stories.length; i<$scope.limit; i++) {
 			var idx = -1;
 			for (var j=0; j<len; j++) {
-				var p = pos[j];
-				if (p < stream[j].stories.length) {
-					if (idx<0) idx = j;
+				while (pos[j] < stream[j].stories.length) {
+					var story = stream[j].stories[pos[j]];
+					var read = story.Unread === false;
+					if (read && !showRead) {
+						pos[j]++;
+						continue;
+					}
+
+					if (idx < 0) {
+						idx = j;
+					}
 					else {
-						if (stream[j].stories[pos[j]].Date < stream[idx].stories[pos[idx]].Date) {
+						if (story.Date < stream[idx].stories[pos[idx]].Date) {
 							idx = j;
 						}
 					}
+					break;
 				}
 			}
 			if (idx<0) break;
