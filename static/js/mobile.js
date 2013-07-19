@@ -4,7 +4,7 @@ function isArray(value) {
 	return Object.prototype.toString.call(value) === '[object Array]';
 }
 
-var app = angular.module('goReadMobileApp', []);
+var app = angular.module('goReadMobileApp', ['ngSanitize']);
 
 app.filter('encodeURI', function() {
 	return encodeURIComponent;
