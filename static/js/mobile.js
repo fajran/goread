@@ -499,7 +499,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 				$scope.scheduleReadStatus(story);
 			}
 		}
-		// TODO refresh list
+		$scope.setVisibility('unread');
 	}
 }]);
 
