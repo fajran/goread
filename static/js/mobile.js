@@ -131,7 +131,7 @@ app.controller('FeedController', function($scope) {
 			$scope.clearBackCallback();
 		}
 		else {
-			$scope.setBackCallback('<< Back', function() {
+			$scope.setBackCallback('&laquo; Back', function() {
 				$scope.feeds = $scope.opml;
 				$scope.current = undefined;
 				$scope.resetScroll();
@@ -207,7 +207,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	$scope.$watch('mode', function(value) {
 		if (value != 'story') return;
 
-		$scope.setBackCallback('<< Feeds', function() {
+		$scope.setBackCallback('&laquo; Feeds', function() {
 			$scope.setMode('feed');
 		});
 
