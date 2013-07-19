@@ -8,6 +8,7 @@
 </head>
 <body class="ng-cloak"
 	data-url-feeds="/static/list-feeds.json"
+	data-url-contents="{{url "get-contents"}}"
 	data-url-feeds-orig="{{url "list-feeds"}}"
 	ng-controller="MainController"
 	ng-init="init()">
@@ -77,7 +78,11 @@
 		<p ng-hide="story==activeStory" class="excerpt" ng-bind="story.Summary"></p>
 	</div>
 	<div class="content" ng-show="story==activeStory">
-		<p>this is the content</p>
+		<p ng-show="contents[story.feed.XmlUrl][story.Id]"
+			ng-bind-html="contents[story.feed.XmlUrl][story.Id]"></p>
+		<p ng-hide="contents[story.feed.XmlUrl][story.Id]" class="loading-content">
+			loading content..
+		</p>
 	</div>
 	<div class="action" ng-show="story==activeStory">
 		<span>

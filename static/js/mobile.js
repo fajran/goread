@@ -33,7 +33,8 @@ app.controller('MainController', function($scope, $http) {
 
 	function collectUrls() {
 		$scope.url = {
-			feeds: $('body').data('url-feeds')
+			feeds: $('body').data('url-feeds'),
+			contents: $('body').data('url-contents')
 		}
 	}
 
@@ -174,7 +175,7 @@ app.controller('FeedController', function($scope) {
 	}
 });
 
-app.controller('StoryController', function($scope) {
+app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	function collectFeeds(feed) {
 		if (feed.Outline) feed = feed.Outline;
 
@@ -201,6 +202,7 @@ app.controller('StoryController', function($scope) {
 	$scope.activeStory = undefined;
 	$scope.totalItems = 0;
 	$scope.hasMoreItems = false;
+	$scope.contents = {};
 
 	$scope.$watch('mode', function(value) {
 		if (value != 'story') return;
@@ -212,10 +214,12 @@ app.controller('StoryController', function($scope) {
 		if (!$scope.activeFeed) return;
 
 		$scope.stories = [];
+		$scope.contents = {};
 		$scope.feeds = collectFeeds($scope.activeFeed);
 		$scope.updateStream();
 		$scope.limit = Math.min(10, $scope.totalItems);
 		$scope.updateStories();
+		$scope.updateContents();
 		$scope.resetScroll();
 	});
 
@@ -280,8 +284,36 @@ app.controller('StoryController', function($scope) {
 	$scope.loadMore = function() {
 		$scope.limit = Math.min($scope.limit + 10, $scope.totalItems);
 		$scope.updateStories();
+		$scope.updateContents();
 	}
-});
+
+	$scope.updateContents = function() {
+		var items = [];
+		for (var i=0; i<$scope.stories.length; i++) {
+			var story = $scope.stories[i];
+			var feed = story.feed;
+			if (!$scope.contents[feed.XmlUrl] || !$scope.contents[feed.XmlUrl][story.Id]) {
+				items.push({Feed: feed.XmlUrl, Story: story.Id});
+			}
+		}
+		$scope.loadContents(items);
+	}
+
+	$scope.setContent = function(XmlUrl, Id, content) {
+		if (!$scope.contents[XmlUrl])
+			$scope.contents[XmlUrl] = {};
+		$scope.contents[XmlUrl][Id] = content;
+	}
+
+	$scope.loadContents = function(items) {
+		$http.post($scope.url.contents, items)
+			.success(function(data) {
+				for (var i=0; i<data.length; i++) {
+					$scope.setContent(items[i].Feed, items[i].Story, data[i]);
+				}
+			});
+	}
+}]);
 
 })();
 
