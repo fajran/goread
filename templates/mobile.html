@@ -7,11 +7,10 @@
 <link rel="stylesheet" type="text/css" href="/static/css/mobile.css"/>
 </head>
 <body class="ng-cloak"
-	data-url-feeds="/static/list-feeds.json"
+	data-url-feeds="{{url "list-feeds"}}"
 	data-url-contents="{{url "get-contents"}}"
 	data-url-mark-read="{{url "mark-read"}}"
 	data-url-mark-unread="{{url "mark-unread"}}"
-	data-url-feeds-orig="{{url "list-feeds"}}"
 	ng-controller="MainController"
 	ng-init="init()">
 
