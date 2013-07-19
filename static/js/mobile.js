@@ -396,6 +396,17 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	$scope.toggleRead = function(story) {
 		$scope.scheduleReadStatus(story);
 	}
+
+	$scope.markItemsRead = function() {
+		for (var i=0; i<$scope.stories.length; i++) {
+			var story = $scope.stories[i];
+			if (story.Unread) {
+				story.Unread = false;
+				$scope.scheduleReadStatus(story);
+			}
+		}
+		// TODO refresh list
+	}
 }]);
 
 })();
