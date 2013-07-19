@@ -125,26 +125,26 @@
 <!-- feed list -->
 <div id="feed-list" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list">
-<li ng-hide="current"
+<li ng-show="isRoot"
 	ng-click="showAllItems()">
 	<i class="icon-folder-open"></i>
 	<span class="title unread">All items</span>
 	<span class="count">100+</span>
 </li>
-<li ng-hide="current">
+<li ng-show="isRoot">
 	<span class="title">Read items</span>
 	<span class="count">100+</span>
 </li>
 <li
 	ng-click="showFolder(current)"
-	ng-show="current">
+	ng-hide="isRoot">
 	<i class="icon-folder-open"></i>
 	<span class="title" ng-bind="current.Title"></span>
 </li>
 <li
 	ng-repeat="feed in feeds"
-	ng-click="activate(feed)"
-	ng-class="{'feed':!feed.Outline, 'root':!current}">
+	ng-click="open(feed)"
+	ng-class="{'feed':!feed.Outline, 'root':isRoot}">
 	<i ng-class="{'icon-th':!feed.Outline, 'icon-folder-open':feed.Outline}"></i>
 	<span class="title" ng-bind="feed.Title"></span>
 </li>

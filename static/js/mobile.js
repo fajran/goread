@@ -130,39 +130,68 @@ app.controller('MainController', function($scope, $http) {
 app.controller('FeedController', function($scope) {
 	$scope.feeds = undefined;
 	$scope.current = undefined;
+	$scope.isRoot = true;
 
 	$scope.$watch('mode', function(value) {
 		if (value != 'feed') return;
-
-		if ($scope.current == undefined) {
-			$scope.feeds = $scope.opml;
-		}
-		$scope.updateBackButton();
-		$scope.resetScroll();
+		$scope.reload();
 	});
 
+	$scope.reset = function() {
+		$scope.feeds = undefined;
+	}
+
+	$scope.reload = function() {
+		var current = undefined;
+		if ($scope.current) {
+			if ($scope.current.Outline) {
+				// find folder with the same title
+				var title = $scope.current.Title;
+				var current = undefined;
+				for (var i=0; i<$scope.opml.length; i++) {
+					var item = $scope.opml[i];
+					if (item.Outline && item.Title == title) {
+						current = item;
+						break;
+					}
+				}
+			}
+		}
+
+		// get the feeds
+		if (!current) {
+			current = $scope.opml;
+		}
+		$scope.setCurrent(current);
+	}
+
+	$scope.setCurrent = function(feed) {
+		$scope.current = feed;
+		$scope.isRoot = feed == $scope.opml;
+
+		if (feed == $scope.opml) {
+			$scope.feeds = $scope.opml;
+		}
+		else {
+			$scope.feeds = feed.Outline;
+		}
+
+		$scope.updateBackButton();
+		$scope.resetScroll();
+	};
+
 	$scope.updateBackButton = function() {
-		if (!$scope.current) {
+		if ($scope.current == $scope.opml) {
 			$scope.clearBackCallback();
 		}
 		else {
 			$scope.setBackCallback('&laquo; Back', function() {
-				$scope.feeds = $scope.opml;
-				$scope.current = undefined;
-				$scope.resetScroll();
+				$scope.setCurrent($scope.opml);
 			});
 		}
 	}
 
-	$scope.$watch('feeds', function(value) {
-		$scope.updateBackButton();
-	});
-
-	$scope.$watch('current', function(value) {
-		$scope.updateBackButton();
-	});
-
-	$scope.activate = function(feed) {
+	$scope.open = function(feed) {
 		if (feed.Outline) {
 			$scope.openFolder(feed);
 		}
@@ -176,9 +205,7 @@ app.controller('FeedController', function($scope) {
 	}
 
 	$scope.openFolder = function(feed) {
-		$scope.current = feed;
-		$scope.feeds = feed.Outline;
-		$scope.resetScroll();
+		$scope.setCurrent(feed);
 	}
 
 	$scope.showFeed = function(feed) {
