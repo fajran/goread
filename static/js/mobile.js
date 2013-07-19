@@ -142,6 +142,7 @@ app.controller('FeedController', function($scope) {
 
 	$scope.$watch('opml', function(value) {
 		if ($scope.mode != 'feed') return;
+		if (!value) return;
 		$scope.reload();
 	}, true);
 
