@@ -126,6 +126,8 @@ ul.story-list .head .next {
 }
 ul.story-list .meta {
 	padding: 4px 8px;
+	font-size: 12px;
+	color: #888;
 }
 ul.story-list .meta i {
 	float: left;
@@ -134,7 +136,13 @@ ul.story-list .meta i {
 ul.story-list .meta p {
 	margin: 0;
 }
-ul.story-list .story.unread .meta .title {
+ul.story-list .meta .title {
+	font-size: 14px;
+}
+ul.story-list .meta span.title {
+	color: black;
+}
+ul.story-list .unread .meta .title {
 	font-weight: bold;
 }
 ul.story-list > li.story {
@@ -149,17 +157,11 @@ ul.story-list > li.story.unread {
 }
 ul.story-list > li.story.open {
 	background: #fff;
-	border: 2px solid #f00;
+	border: 2px solid #3498db;
 }
 ul.story-list .content {
-	padding: 0 8px;
+	margin: 8px;
 	cursor: default;
-}
-ul.story-list .meta .feed-title,
-ul.story-list .meta .excerpt,
-ul.story-list .meta .info {
-	font-size: 12px;
-	color: #888;
 }
 ul.story-list .action {
 	height: 30px;
@@ -190,6 +192,11 @@ ul.story-list > li.more {
 ul.story-list > li.more p {
 	margin: 0;
 	font-size: 12px;
+}
+ul.story-list > li.more p:first-child {
+	font-size: 14px;
+	color: #08c;
+	font-weight: bold;
 }
 ul.story-list > li.more p a {
 	font-size: 14px;
