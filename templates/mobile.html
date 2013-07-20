@@ -60,7 +60,7 @@
 <div class="content">
 
 <!-- story list -->
-<div id="story-list" ng-show="!loading && mode=='story'" ng-controller="StoryController">
+<div id="story-list" class="block" ng-show="!loading && mode=='story'" ng-controller="StoryController">
 <ul class="story-list">
 <li ng-repeat="story in stories"
 	class="story"
@@ -130,7 +130,7 @@
 </div><!-- // story list -->
 
 <!-- feed list -->
-<div id="feed-list" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
+<div id="feed-list" class="block" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list"
 	ng-class="{'top':isTop, 'in':!isTop}">
 <li ng-show="isTop && feeds"
@@ -158,7 +158,7 @@
 </div><!-- //feed-list -->
 
 <!-- loading -->
-<div id="loading" ng-show="loading">
+<div id="loading" class="block" ng-show="loading">
 	<p>loading..</p>
 </div>
 

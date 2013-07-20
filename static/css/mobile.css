@@ -62,13 +62,16 @@ body, html {
 	margin-left: 10px;
 }
 
+.block {
+	min-height: 200px;
+}
+
 /** feed list **/
 
 ul.feed-list {
 	list-style: none;
 	margin: 0px;
 	padding: 0px;
-	min-height: 200px;
 }
 ul.feed-list > li {
 	padding: 10px;
@@ -99,7 +102,6 @@ ul.story-list {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
-	min-height: 200px;
 }
 ul.story-list > li {
 	min-height: 40px;
@@ -221,7 +223,6 @@ ul.story-list > li.mark-read p {
 }
 
 #loading {
-	height: 200px;
 	padding: 10px;
 }
 
