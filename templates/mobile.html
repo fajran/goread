@@ -133,7 +133,7 @@
 <div id="feed-list" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list"
 	ng-class="{'top':isTop, 'in':!isTop}">
-<li ng-show="isTop"
+<li ng-show="isTop && feeds"
 	ng-click="showAllItems()">
 	<i class="icon-folder-open"></i>
 	<!--
