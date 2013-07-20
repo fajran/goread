@@ -189,6 +189,19 @@ ul.story-list > li.mark-read p {
 	font-size: 12px;
 }
 
+.reset, .reset * {
+	font-size: 14px;
+}
+.reset img {
+	max-width: 100%;
+}
+.reset a {
+	color: #08c;
+}
+.reset {
+	overflow: auto;
+}
+
 #loading {
 	height: 200px;
 	padding: 10px;

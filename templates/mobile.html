@@ -91,8 +91,8 @@
 		<p ng-hide="story==activeStory" class="excerpt" ng-bind="story.Summary"></p>
 	</div>
 	<div class="content" ng-show="story==activeStory">
-		<p ng-show="contents[story.feed.XmlUrl][story.Id]"
-			ng-bind-html="contents[story.feed.XmlUrl][story.Id]"></p>
+		<div ng-show="contents[story.feed.XmlUrl][story.Id]" class="reset"
+			ng-bind-html="contents[story.feed.XmlUrl][story.Id]"></div>
 		<p ng-hide="contents[story.feed.XmlUrl][story.Id]" class="loading-content">
 			loading content..
 		</p>
