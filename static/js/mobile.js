@@ -338,6 +338,10 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.totalItems = total;
 	}
 
+	function isRead(story) {
+		return story.Unread === false;
+	}
+
 	$scope.updateStories = function() {
 		var stream = $scope.stream;
 		var len = stream.length;
@@ -357,8 +361,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 			for (var j=0; j<len; j++) {
 				while (pos[j] < stream[j].stories.length) {
 					var story = stream[j].stories[pos[j]];
-					var read = story.Unread === false;
-					if (read && !showRead) {
+					if (isRead(story) && !showRead) {
 						pos[j]++;
 						continue;
 					}
@@ -396,6 +399,9 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		if ($scope.activeStory == story) return;
 		$scope.activeStory = story;
 		$scope.setRead(story);
+		if (!$scope.hasContent(story)) {
+			$scope.loadContents([story]);
+		}
 	}
 
 	$scope.hide = function() {
