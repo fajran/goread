@@ -259,11 +259,9 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		}
 	}
 
-	$scope.limit = 10;
 	$scope.stories = [];
 	$scope.activeStory = undefined;
 	$scope.pos = undefined;
-	$scope.totalItems = 0;
 	$scope.hasMoreItems = false;
 	$scope.contents = {};
 	$scope.readStatusChanges = [];
@@ -316,33 +314,28 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 	$scope.prepareFeeds = function() {
 		$scope.feeds = collectFeeds($scope.activeFeed);
 		$scope.updateStream();
-		$scope.limit = Math.min(10, $scope.totalItems);
-		$scope.updateStories();
-		$scope.updateContents();
+		$scope.loadMoreStories();
 	}
 
 	$scope.updateStream = function() {
 		var source = $scope.$parent.stories;
 		var stream = [];
-		var total = 0;
 		var feeds = $scope.feeds;
 		for (var i=0; i<feeds.length; i++) {
 			var feed = feeds[i];
 			var url = feed.XmlUrl;
 			if (source[url]) {
 				stream.push({feed:feed, stories:source[url]});
-				total += source[url].length;
 			}
 		}
 		$scope.stream = stream;
-		$scope.totalItems = total;
 	}
 
 	function isRead(story) {
 		return story.Unread === false;
 	}
 
-	$scope.updateStories = function() {
+	$scope.loadNextBatch = function() {
 		var stream = $scope.stream;
 		var len = stream.length;
 
@@ -355,7 +348,8 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		var showRead = $scope.visibility == 'all';
 
 		var stories = $scope.stories.slice();
-		for (var i=stories.length; i<$scope.limit; i++) {
+		var hasMore = true;
+		for (var i=0; i<10; i++) {
 			var next = undefined;
 			var idx = -1;
 			for (var j=0; j<len; j++) {
@@ -381,7 +375,10 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 					break;
 				}
 			}
-			if (!next) break;
+			if (!next) {
+				hasMore = false;
+				break;
+			}
 
 			if (next.Unread === undefined) {
 				next.Unread = true; // FIXME get the unread status
@@ -392,7 +389,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 		$scope.pos = pos;
 		$scope.stories = stories;
-		$scope.hasMoreItems = $scope.limit < $scope.totalItems;
+		$scope.hasMoreItems = hasMore;
 	}
 
 	$scope.$watch('stories', function(values) {
@@ -424,9 +421,8 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.show(story);
 	}
 
-	$scope.loadMore = function() {
-		$scope.limit = Math.min($scope.limit + 10, $scope.totalItems);
-		$scope.updateStories();
+	$scope.loadMoreStories = function() {
+		$scope.loadNextBatch();
 		$scope.updateContents();
 	}
 

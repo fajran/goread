@@ -115,14 +115,14 @@
 </li>
 <li class="load more"
 	ng-show="hasMoreItems"
-	ng-click="loadMore()">
+	ng-click="loadMoreStories()">
 	<p><a href="">Load more items</a></p>
-	<p>more than <span ng-bind="limit"></span> items</p>
+	<p>more than <span ng-bind="stories.length"></span> items</p>
 </li>
 <li class="no more"
 	ng-hide="hasMoreItems">
-	<p ng-show="totalItems==1">1 item</p>
-	<p ng-hide="totalItems==1"><span ng-bind="totalItems"></span> items</p>
+	<p ng-show="stories.length==1">1 item</p>
+	<p ng-hide="stories.length==1"><span ng-bind="stories.length"></span> items</p>
 </li>
 <li class="mark-read control" ng-show="unreadCount>0">
 	<p><a href="" ng-click="markItemsRead()">Mark these items as read</a></p>
