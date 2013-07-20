@@ -226,3 +226,23 @@ ul.story-list > li.mark-read p {
 	padding: 10px;
 }
 
+#login {
+	padding: 20px;
+}
+#login h1 {
+	font-size: 24px;
+}
+#login .signin {
+	margin-top: 20px;
+}
+#login .signin a {
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+#login .signin img {
+	height: 32px;
+	margin: 0px;
+	padding: 0px;
+}
+

@@ -165,6 +165,18 @@
 </div><!-- //feed-list -->
 {{end}}
 
+{{if not .User}}
+<!-- login -->
+<div id="login" class="block" ng-show="!loading">
+<h1>Hi, RSS user</h1>
+<p>Go Read is a web-based RSS reader.</p>
+<p>It is designed to be as useful as Google Reader.</p>
+<p class="signin"><a href="{{url "login-google"}}" class="btn btn-primary">
+	<img src="/static/img/google-signin.png" height="42" alt="sign up / log in with google"/>
+</a></p>
+</div><!-- //login -->
+{{end}}
+
 <!-- loading -->
 <div id="loading" class="block" ng-show="loading">
 	<p>loading..</p>
