@@ -395,6 +395,16 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.hasMoreItems = $scope.limit < $scope.totalItems;
 	}
 
+	$scope.$watch('stories', function(values) {
+		var count = 0;
+		angular.forEach(values, function(story) {
+			if (story.Unread) {
+				count += 1;
+			}
+		});
+		$scope.unreadCount = count;
+	}, true);
+
 	$scope.show = function(story) {
 		if ($scope.activeStory == story) return;
 		$scope.activeStory = story;
