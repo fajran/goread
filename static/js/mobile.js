@@ -330,7 +330,14 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 			var feed = feeds[i];
 			var url = feed.XmlUrl;
 			if (source[url]) {
-				stream.push({feed:feed, stories:source[url]});
+				var stories = source[url];
+				if (!stories.$gr$sorted) {
+					stories.sort(function(a, b) {
+						return a.Date - b.Date;
+					});
+					stories.$gr$sorted = true;
+				}
+				stream.push({feed:feed, stories:stories});
 			}
 		}
 		$scope.stream = stream;
