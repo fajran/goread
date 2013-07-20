@@ -414,13 +414,17 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.updateContents();
 	}
 
+	$scope.hasContent = function(story) {
+		var feed = story.feed;
+		return $scope.contents[feed.XmlUrl] && $scope.contents[feed.XmlUrl][story.Id];
+	}
+
 	$scope.updateContents = function() {
 		var items = [];
 		for (var i=0; i<$scope.stories.length; i++) {
 			var story = $scope.stories[i];
-			var feed = story.feed;
-			if (!$scope.contents[feed.XmlUrl] || !$scope.contents[feed.XmlUrl][story.Id]) {
-				items.push({Feed: feed.XmlUrl, Story: story.Id});
+			if (!$scope.hasContent(story)) {
+				items.push(story);
 			}
 		}
 		$scope.loadContents(items);
@@ -432,7 +436,13 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		$scope.contents[XmlUrl][Id] = content;
 	}
 
-	$scope.loadContents = function(items) {
+	$scope.loadContents = function(stories) {
+		var items = [];
+		for (var i=0; i<stories.length; i++) {
+			var story = stories[i];
+			var feed = story.feed;
+			items.push({Feed: feed.XmlUrl, Story: story.Id});
+		}
 		$http.post($scope.url.contents, items)
 			.success(function(data) {
 				for (var i=0; i<data.length; i++) {
