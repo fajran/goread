@@ -235,6 +235,11 @@ app.controller('FeedController', function($scope) {
 	$scope.showFolder = function(feed) {
 		$scope.setActiveFeed(feed);
 	}
+
+	// UI things
+	$scope.resetScrollLeft = function() {
+		$('#feed-list > ul > li').scrollLeft(0);
+	}
 });
 
 app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
@@ -530,6 +535,11 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		else {
 			$scope.setVisibility('unread');
 		}
+	}
+
+	// UI things
+	$scope.resetScrollLeft = function() {
+		$('#story-list > ul > li').scrollLeft(0);
 	}
 }]);
 

@@ -54,6 +54,12 @@ body, html {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+.nav > .btn {
+	margin-right: 10px;
+}
+.nav .pull-right > .btn:first-child {
+	margin-left: 10px;
+}
 
 /** feed list **/
 
@@ -68,6 +74,7 @@ ul.feed-list > li {
 	border-bottom: 1px solid #ccc;
 	cursor: pointer;
 	line-height: 22px;
+	overflow: auto;
 }
 ul.feed-list > li > i {
 	float: left;
@@ -83,7 +90,6 @@ ul.feed-list > li > span.count {
 	color: #888;
 }
 ul.feed-list.in > li.feed {
-	padding-left: 34px;
 }
 
 /** story list **/
@@ -99,6 +105,7 @@ ul.story-list > li {
 	border: 2px solid #fff;
 	border-top: 1px solid #ccc;
 	cursor: pointer;
+	overflow: auto;
 }
 ul.story-list > li.open {
 	cursor: default;

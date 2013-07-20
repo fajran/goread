@@ -30,7 +30,7 @@
 </div>
 
 <div class="nav top">
-	<div class="btn btn-small pull-left btn-back"
+	<div class="btn btn-small pull-left back-button"
 		ng-show="backButton"
 		ng-bind-html="backButton.label"
 		ng-click="backButtonClick()"></div>
@@ -67,7 +67,7 @@
 <li ng-repeat="story in stories"
 	class="story"
 	ng-class="{'open':story==activeStory, 'unread':story.Unread}"
-	ng-click="show(story)">
+	ng-click="show(story); resetScrollLeft();">
 	<div class="head"
 		ng-click="hide()" eat-click
 		ng-show="story==activeStory">
@@ -143,14 +143,14 @@
 	<span class="title unread">All items</span>
 </li>
 <li
-	ng-click="showFolder(current)"
+	ng-click="showFolder(current); resetScrollLeft();"
 	ng-hide="isTop">
 	<i class="icon-folder-open"></i>
 	<span class="title" ng-bind="current.Title"></span>
 </li>
 <li
 	ng-repeat="feed in feeds"
-	ng-click="open(feed)"
+	ng-click="open(feed); resetScrollLeft();"
 	ng-class="{'feed':!feed.Outline}">
 	<i ng-class="{'icon-th':!feed.Outline, 'icon-folder-open':feed.Outline}"></i>
 	<span class="title" ng-bind="feed.Title"></span>
@@ -166,7 +166,7 @@
 </div><!-- //content -->
 
 <div class="nav bottom">
-	<div class="btn btn-small pull-left btn-back"
+	<div class="btn btn-small pull-left back-button"
 		ng-show="backButton"
 		ng-bind-html="backButton.label"
 		ng-click="backButtonClick()"></div>
