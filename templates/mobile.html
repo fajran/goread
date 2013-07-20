@@ -16,6 +16,7 @@
 
 <div class="header">
 	<div class="brand">go read</div>
+	{{if .User}}
 	<a href="" id="btn-upgrade" class="btn btn-success btn-small">Upgrade</a>
 	<div class="btn-group info">
 		<a class="btn btn-small dropdown-toggle account" data-toggle="dropdown" href="#">
@@ -25,9 +26,11 @@
 		<li><a href="{{url "logout"}}">logout</a></li>
 		</ul>
 	</div>
+	{{end}}
 </div>
 
 <div class="nav top">
+	{{if .User}}
 	<div class="btn btn-small pull-left back-button"
 		ng-show="backButton"
 		ng-bind-html="backButton.label"
@@ -55,10 +58,12 @@
 		</div>
 	</div>
 	<div class="title" ng-bind="title"></div>
+	{{end}}
 </div>
 
 <div class="content">
 
+{{if .User}}
 <!-- story list -->
 <div id="story-list" class="block" ng-show="!loading && mode=='story'" ng-controller="StoryController">
 <ul class="story-list">
@@ -128,7 +133,9 @@
 </li>
 </ul>
 </div><!-- // story list -->
+{{end}}
 
+{{if .User}}
 <!-- feed list -->
 <div id="feed-list" class="block" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list"
@@ -156,6 +163,7 @@
 </li>
 </ul>
 </div><!-- //feed-list -->
+{{end}}
 
 <!-- loading -->
 <div id="loading" class="block" ng-show="loading">
