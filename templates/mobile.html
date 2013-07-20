@@ -16,16 +16,14 @@
 
 <div class="header">
 	<div class="brand">go read</div>
-	<div class="info">
-		<div><a href="" id="btn-upgrade" class="btn btn-success btn-small">Upgrade</a></div>
-		<div class="btn-group">
-			<a class="btn btn-small dropdown-toggle account" data-toggle="dropdown" href="#">
-				{{.User}} <span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu">
-			<li><a href="{{url "logout"}}">logout</a></li>
-			</ul>
-		</div>
+	<a href="" id="btn-upgrade" class="btn btn-success btn-small">Upgrade</a>
+	<div class="btn-group info">
+		<a class="btn btn-small dropdown-toggle account" data-toggle="dropdown" href="#">
+			{{.User}} <span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu">
+		<li><a href="{{url "logout"}}">logout</a></li>
+		</ul>
 	</div>
 </div>
 

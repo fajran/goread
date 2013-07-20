@@ -8,25 +8,22 @@ body, html {
 }
 
 .header {
-	height: 40px;
+	height: 30px;
+	padding: 5px 5px 0 5px;
 }
 
 .header .brand {
 	background: url(/static/icon.png) top left no-repeat;
 	height: 30px;
-	display: inline-block;
 	padding-left: 30px;
-	line-height: 30px;
-	margin: 5px;
+	line-height: 25px;
+	margin-right: 10px;
+	display: inline-block;
 }
 
 .header .info {
 	float: right;
-	margin: 8px 8px 0 0;
-}
-.header .info > div {
-	margin-left: 5px;
-	display: inline-block;
+	margin-bottom: 5px;
 }
 .header .account + .dropdown-menu {
 	right: 0;
@@ -43,6 +40,10 @@ body, html {
 	background: #34495e;
 	height: 26px;
 	margin: 0px;
+	clear: both;
+}
+.nav.top {
+	margin-top: 5px;
 }
 .nav .title {
 	color: white;
