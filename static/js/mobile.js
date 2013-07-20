@@ -84,8 +84,18 @@ app.controller('MainController', function($scope, $http) {
 			});
 	}
 
-	$scope.resetScroll = function() {
-		$('.nav.top')[0].scrollIntoView(true);
+	// UI
+
+	$scope.scrollToTop = function() {
+		$scope.$evalAsync(function() {
+			$(window).scrollTop(0);
+		});
+	}
+
+	$scope.scrollToHead = function() {
+		$scope.$evalAsync(function() {
+			$(window).scrollTop($('.nav.top')[0].offsetTop);
+		});
 	}
 
 	// mode
@@ -197,7 +207,12 @@ app.controller('FeedController', function($scope) {
 		}
 
 		$scope.updateBackButton();
-		$scope.resetScroll();
+		if ($scope.isTop) {
+			$scope.scrollToTop();
+		}
+		else {
+			$scope.scrollToHead();
+		}
 	};
 
 	$scope.updateBackButton = function() {
@@ -242,7 +257,7 @@ app.controller('FeedController', function($scope) {
 	}
 });
 
-app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
+app.controller('StoryController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 	function collectFeeds(feed) {
 		if (feed.Outline) feed = feed.Outline;
 
@@ -306,7 +321,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 
 		$scope.reset();
 		$scope.prepareFeeds();
-		$scope.resetScroll();
+		$scope.scrollToHead();
 	};
 
 	$scope.reset = function() {
@@ -421,6 +436,7 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		if (!$scope.hasContent(story)) {
 			$scope.loadContents([story]);
 		}
+		$scope.scrollToStory(story);
 	}
 
 	$scope.hide = function() {
@@ -431,6 +447,14 @@ app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		if (index<0 || index>=$scope.stories.length) return;
 		var story = $scope.stories[index];
 		$scope.show(story);
+	}
+
+	$scope.scrollToStory = function(story) {
+		$timeout(function() {
+			var index = $scope.stories.indexOf(story);
+			var el = $('#story-list > ul > li.story')[index];
+			$(window).scrollTop(el.offsetTop);
+		}, 0);
 	}
 
 	$scope.loadMoreStories = function() {
