@@ -87,6 +87,7 @@
 			<span class="feed-title">&ndash; <span ng-bind="story.feed.Title"></span></span>
 		</p>
 		<p ng-hide="story==activeStory" class="excerpt" ng-bind="story.Summary"></p>
+		<p ng-show="story==activeStory" class="date" ng-bind="story.Date * 1000 | date:'fullDate'"></p>
 	</div>
 	<div class="content" ng-show="story==activeStory">
 		<div ng-show="contents[story.feed.XmlUrl][story.Id]" class="reset"
