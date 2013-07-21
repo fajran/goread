@@ -85,6 +85,16 @@ app.controller('MainController', function($scope, $http) {
 			});
 	}
 
+	// account
+
+	$scope.showAccount = function() {
+		$scope.setMode('account');
+	}
+
+	$scope.setAccountType = function(type) {
+		$scope.accountType = type;
+	}
+
 	// UI
 
 	$scope.scrollToTop = function() {
@@ -576,12 +586,8 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 }]);
 
 app.controller('AccountController', ['$scope', '$http', function($scope, $http) {
-	$scope.accountType = 0;
 	$scope.account = undefined;
-
-	$scope.showAccount = function() {
-		$scope.setMode('account');
-	}
+	$scope.accountType = 0; // shadow value
 
 	$scope.$watch('mode', function(value) {
 		if (value != 'account') return;
@@ -600,11 +606,13 @@ app.controller('AccountController', ['$scope', '$http', function($scope, $http) 
 		});
 	}
 
-	// Account
-
-	$scope.setAccountType = function(type) {
-		$scope.accountType = type;
-	}
+	$scope.$watch('accountType', function(value) {
+		// Watch the AccountController's accountType value
+		// when it's changed, update the MainController's value.
+		// FIXME: Why? to keep checkout() and unCheckout() intact
+		// just like what they are in site.js
+		$scope.setAccountType(value);
+	});
 
 	// misc
 
