@@ -26,6 +26,17 @@ app.directive('eatClick', function() {
 	}
 })
 
+app.filter('truncateNumber', function() {
+	return function(value, max) {
+		value = parseInt(value);
+		max = parseInt(max);
+		if (value > max) {
+			return max + '+';
+		}
+		return value;
+	}
+});
+
 app.controller('MainController', function($scope, $http) {
 	$scope.loading = 1;
 	$scope.title = ''
@@ -160,12 +171,20 @@ app.controller('MainController', function($scope, $http) {
 	$scope.setVisibility = function(visibility) {
 		$scope.visibility = visibility;
 	}
+
+	// utils
+
+	$scope.isStoryRead = function(story) {
+		return story.Unread === false;
+	}
+
 });
 
 app.controller('FeedController', function($scope) {
 	$scope.feeds = undefined;
 	$scope.current = undefined;
 	$scope.isTop = true;
+	$scope.unread = undefined;
 
 	$scope.$watch('opml', function(value) {
 		if ($scope.mode != 'feed') return;
@@ -183,6 +202,60 @@ app.controller('FeedController', function($scope) {
 	}
 
 	$scope.reload = function() {
+		$scope.resetUnreadCount();
+		$scope.resetCurrentView();
+	}
+
+	$scope.resetUnreadCount = function() {
+		var unread = {
+			all: 0,
+			folders: {},
+			feeds: {}
+		}
+
+		if (!$scope.opml || !$scope.stories) {
+			$scope.unreadCount = unread;
+			return;
+		}
+
+		var countUnread = function(stories) {
+			if (!stories) return 0;
+			var count = 0;
+			for (var i=0; i<stories.length; i++) {
+				var story = stories[i];
+				if (!$scope.isStoryRead(story)) {
+					count++;
+				}
+			}
+			return count;
+		}
+
+		for (var i=0; i<$scope.opml.length; i++) {
+			var feed = $scope.opml[i];
+			if (feed.Outline) {
+				unread.folders[feed.Title] = 0;
+				for (var j=0; j<feed.Outline.length; j++) {
+					var child = feed.Outline[j];
+					var url = child.XmlUrl;
+					var count = countUnread($scope.stories[url]);
+					unread.all += count;
+					unread.folders[feed.Title] += count;
+					unread.feeds[url] = count;
+				}
+			}
+			else {
+				var url = feed.XmlUrl;
+				var count = countUnread($scope.stories[url]);
+				unread.all += count;
+				unread.feeds[url] = count;
+			}
+		}
+
+		$scope.unreadCount = unread;
+	}
+
+	$scope.resetCurrentView = function() {
+		// determine currently opened feed
 		var current = undefined;
 		if ($scope.current) {
 			if ($scope.current.Outline) {
@@ -369,10 +442,6 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 		$scope.stream = stream;
 	}
 
-	function isRead(story) {
-		return story.Unread === false;
-	}
-
 	$scope.loadNextBatch = function() {
 		var stream = $scope.stream;
 		var len = stream.length;
@@ -393,7 +462,7 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 			for (var j=0; j<len; j++) {
 				while (pos[j] < stream[j].stories.length) {
 					var story = stream[j].stories[pos[j]];
-					if (isRead(story) && !showRead) {
+					if ($scope.isStoryRead(story) && !showRead) {
 						pos[j]++;
 						continue;
 					}

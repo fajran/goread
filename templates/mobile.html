@@ -148,15 +148,14 @@
 <li ng-show="isTop && feeds"
 	ng-click="showAllItems()">
 	<i class="icon-folder-open"></i>
-	<!--
-	<span class="count">100+</span>
-	-->
+	<span class="count" ng-bind="unreadCount.all | truncateNumber:1000"></span>
 	<span class="title unread">All items</span>
 </li>
 <li
 	ng-click="showFolder(current); resetScrollLeft();"
 	ng-hide="isTop">
 	<i class="icon-folder-open"></i>
+	<span class="count" ng-bind="unreadCount.folders[current.Title] | truncateNumber:1000"></span>
 	<span class="title" ng-bind="current.Title"></span>
 </li>
 <li
@@ -164,6 +163,8 @@
 	ng-click="open(feed); resetScrollLeft();"
 	ng-class="{'feed':!feed.Outline}">
 	<i ng-class="{'icon-th':!feed.Outline, 'icon-folder-open':feed.Outline}"></i>
+	<span class="count" ng-show="feed.Outline" ng-bind="unreadCount.folders[feed.Title] | truncateNumber:1000"></span>
+	<span class="count" ng-hide="feed.Outline" ng-bind="unreadCount.feeds[feed.XmlUrl] | truncateNumber:1000"></span>
 	<span class="title" ng-bind="feed.Title"></span>
 </li>
 </ul>
