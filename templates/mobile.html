@@ -213,6 +213,24 @@
 <li>Some future features will be subscriber-only</li>
 </ul>
 
+<h2>Donation</h2>
+
+<form class="form-inline">
+	<div class="input-prepend input-append">
+		<span class="add-on">$</span>
+		<input type="number" class="input-small"
+			ng-model="donateAmount" min="2" ng-init="donateAmount = 5"/>
+	</div>
+	<button class="btn btn-success" id="donateButton"
+		data-loading-text="Working..."
+		ng-click="donate()">Donate</button>
+</form>
+
+<p>Some features have unavoidable costs, and won't be implemented until they
+are sustainable. For example, HTTPS requires purchase of certificates and other
+costs. Donations help fund these features faster. Donations do not mark your
+account as a subscriber &ndash; they are just a way to donate.</p>
+
 </div><!-- //account -->
 {{end}}
 
