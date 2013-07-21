@@ -130,7 +130,8 @@
 <li class="no more"
 	ng-hide="hasMoreItems">
 	<p ng-show="stories.length==1">1 item</p>
-	<p ng-hide="stories.length==1"><span ng-bind="stories.length"></span> items</p>
+	<p ng-show="stories.length>1"><span ng-bind="stories.length"></span> items</p>
+	<p ng-show="stories.length==0" class="empty">"<span ng-bind="activeFeed.Title"></span>" has no unread items.</p>
 </li>
 <li class="mark-read control" ng-show="unreadCount>0">
 	<p><a href="" ng-click="markItemsRead()">Mark these items as read</a></p>

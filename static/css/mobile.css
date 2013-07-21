@@ -196,7 +196,7 @@ ul.story-list > li.more p {
 	margin: 0;
 	font-size: 12px;
 }
-ul.story-list > li.more p:first-child {
+ul.story-list > li.load.more p:first-child {
 	font-size: 14px;
 	color: #08c;
 	font-weight: bold;
@@ -208,6 +208,12 @@ ul.story-list > li.mark-read p {
 	text-align: right;
 	margin: 16px 8px 8px 8px;
 	font-size: 12px;
+}
+ul.story-list > li.no.more p.empty {
+	text-align: center;
+	font-weight: bold;
+	padding: 20px 0;
+	font-size: 16px;
 }
 
 .reset, .reset * {
