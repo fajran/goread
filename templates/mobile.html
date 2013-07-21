@@ -36,10 +36,10 @@
 		ng-bind-html="backButton.label"
 		ng-click="backButtonClick()"></div>
 	<div class="pull-right">
-		<div class="btn btn-small" id="btn-refresh" ng-click="refresh()">
+		<div class="btn btn-small" ng-hide="loading" id="btn-refresh" ng-click="refresh()">
 			<i class="icon-repeat"></i>
 		</div>
-		<div class="btn-group">
+		<div class="btn-group" ng-hide="loading">
 			<a class="btn btn-small dropdown-toggle" id="btn-menu" data-toggle="dropdown" href="#">
 				<i class="icon-chevron-down"></i>
 			</a>
