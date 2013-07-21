@@ -94,6 +94,7 @@ ul.feed-list > li > span.count {
 	color: #888;
 }
 ul.feed-list.in > li.feed {
+	padding-left: 30px;
 }
 
 /** story list **/
