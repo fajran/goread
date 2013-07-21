@@ -198,20 +198,45 @@
 <h1>Account</h1>
 <p>Go Read is supported by user subscriptions. Without them, we cannot pay for our servers.</p>
 
-<h2>Reasons to subscribe</h2>
-<ul>
-<li>higher feed update frequency</li>
-<li>funding for new features:
+<h2>Subscription</h2>
+<div class="subscribe" ng-hide="accountType">
+	<div class="plans">
+	{{range .StripePlans}}
+	<button
+		class="btn btn-primary btn-large"
+		ng-click="checkout('{{.Id}}', '{{.Desc}}', {{.Amount}})"
+		data-loading-text="Working..."
+		id="button{{.Id}}"
+		>Subscribe for {{.Name}}</button>
+	{{end}}
+	</div>
+
+	<h3>Reasons to subscribe</h3>
 	<ul>
-	<li>search</li>
-	<li>all items mode for everything, not just one feed</li>
-	<li>HTTPS</li>
-	<li>others</li>
+	<li>higher feed update frequency</li>
+	<li>funding for new features:
+		<ul>
+		<li>search</li>
+		<li>all items mode for everything, not just one feed</li>
+		<li>HTTPS</li>
+		<li>others</li>
+		</ul>
+	</li>
+	<li>Go Read servers cost money - without subscriptions we cannot stay online</li>
+	<li>Some future features will be subscriber-only</li>
 	</ul>
-</li>
-<li>Go Read servers cost money - without subscriptions we cannot stay online</li>
-<li>Some future features will be subscriber-only</li>
-</ul>
+</div>
+<div class="unsubscribe" ng-show="accountType">
+	<p>You are subscribed on <strong ng-bind="date(account.Created)"></strong></p>
+	<p>Next payment:
+		<strong ng-click="t()">
+			${{`{{account.Amount/100}}`}} on {{`{{date(account.Next)}}`}}, recurring each {{`{{account.Interval}}`}}
+		</strong>
+	<p>
+		<button class="btn" ng-click="unCheckout()"
+			data-loading-text="Working..." id="uncheckoutButton">Unsubscribe</button>
+	</p>
+</div>
 
 <h2>Donation</h2>
 
@@ -253,6 +278,7 @@ account as a subscriber &ndash; they are just a way to donate.</p>
 	<script src="{{.BootstrapJs}}"></script>
 	<script src="{{.Angular}}"></script>
 	<script src="{{.AngularSanitize}}"></script>
+	<script src="/static/js/moment.min.js"></script>
 	<script type="text/javascript" src="/static/js/mobile.js"></script>
 </body>
 </html>

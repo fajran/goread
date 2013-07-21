@@ -575,7 +575,7 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 	}
 }]);
 
-app.controller('AccountController', ['$scope', function($scope) {
+app.controller('AccountController', ['$scope', '$http', function($scope, $http) {
 	$scope.accountType = 0;
 	$scope.account = undefined;
 
@@ -669,6 +669,58 @@ app.controller('AccountController', ['$scope', function($scope) {
 			});
 		});
 	};
+
+	// subscription
+
+	$scope.checkout = function(plan, desc, amount) {
+		$scope.loadCheckout(function() {
+			var token = function(res){
+				var button = $('#button' + plan);
+				button.button('loading');
+				$scope.http('POST', $('#account').attr('data-url-charge'), {
+					token: res.id,
+					plan: plan
+				})
+					.success(function(data) {
+						button.button('reset');
+						$scope.accountType = 2;
+						$scope.account = data;
+					})
+					.error(function(data) {
+						button.button('reset');
+						alert(data);
+					});
+			};
+			StripeCheckout.open({
+				key: $('#account').attr('data-stripe-key'),
+				amount: amount,
+				currency: 'usd',
+				name: 'Go Read',
+				description: desc,
+				panelLabel: 'Subscribe for',
+				token: token
+			});
+		});
+	};
+
+	$scope.unCheckout = function() {
+		if (!confirm('Sure you want to unsubscribe?')) return;
+		var button = $('#uncheckoutButton');
+		button.button('loading');
+		$http.post($('#account').attr('data-url-uncheckout'))
+			.success(function() {
+				delete $scope.account;
+				$scope.accountType = 0;
+				button.button('reset');
+				alert('Unsubscribed');
+			})
+			.error(function() {
+				button.button('reset');
+				console.log(data);
+				alert('Error');
+			});
+	};
+
 }]);
 
 })();
