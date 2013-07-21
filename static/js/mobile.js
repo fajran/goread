@@ -359,7 +359,7 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 				var stories = source[url];
 				if (!stories.$gr$sorted) {
 					stories.sort(function(a, b) {
-						return a.Date - b.Date;
+						return b.Date - a.Date;
 					});
 					stories.$gr$sorted = true;
 				}
@@ -404,7 +404,7 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 						idx = j;
 					}
 					else {
-						if (story.Date < next.Date) {
+						if (story.Date > next.Date) {
 							next = story;
 							next.feed = stream[j].feed;
 							idx = j;
