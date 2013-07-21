@@ -226,6 +226,18 @@ app.controller('FeedController', function($scope) {
 		$scope.resetCurrentView();
 	}
 
+	$scope.getUnreadCount = function(feed) {
+		if (!feed || !$scope.unreadCount) {
+			return 0;
+		}
+		if (feed.Outline) {
+			return $scope.unreadCount.folders[feed.Title];
+		}
+		else {
+			return $scope.unreadCount.feeds[feed.XmlUrl];
+		}
+	}
+
 	$scope.resetUnreadCount = function() {
 		var unread = {
 			all: 0,

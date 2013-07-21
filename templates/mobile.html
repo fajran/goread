@@ -150,7 +150,16 @@
 <div id="feed-list" class="block" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list"
 	ng-class="{'top':isTop, 'in':!isTop}">
-<li ng-show="isTop && feeds"
+<li class="empty"
+	ng-hide="feeds">
+	<p>You have no subscriptions.</p>
+</li>
+<li class="empty"
+	ng-show="visibility=='unread' && unreadCount.all==0 && feeds">
+	<p>You have no unread items.</p>
+</li>
+<li ng-show="isTop && feeds && (visibility=='all' || unreadCount.all>0)"
+	ng-class="{'unread':unreadCount.all>0}"
 	ng-click="showAllItems()">
 	<i class="icon-folder-open"></i>
 	<span class="count" ng-bind="unreadCount.all | truncateNumber:1000"></span>
@@ -158,18 +167,24 @@
 </li>
 <li
 	ng-click="showFolder(current); resetScrollLeft();"
-	ng-hide="isTop">
+	ng-class="{'unread':getUnreadCount(current)>0}"
+	ng-show="!isTop && (visibility=='all' || getUnreadCount(current)>0)">
 	<i class="icon-folder-open"></i>
-	<span class="count" ng-bind="unreadCount.folders[current.Title] | truncateNumber:1000"></span>
+	<span class="count" ng-bind="getUnreadCount(current) | truncateNumber:1000"></span>
 	<span class="title" ng-bind="current.Title"></span>
+</li>
+<li
+	class="empty"
+	ng-show="!isTop && visibility=='unread' && getUnreadCount(current)==0">
+	<p>"<span ng-bind="current.Title"></span>" has no unread items.</p>
 </li>
 <li
 	ng-repeat="feed in feeds"
 	ng-click="open(feed); resetScrollLeft();"
-	ng-class="{'feed':!feed.Outline}">
+	ng-show="visibility=='all' || getUnreadCount(feed)>0"
+	ng-class="{'feed':!feed.Outline, 'unread':getUnreadCount(feed)>0}">
 	<i ng-class="{'icon-th':!feed.Outline, 'icon-folder-open':feed.Outline}"></i>
-	<span class="count" ng-show="feed.Outline" ng-bind="unreadCount.folders[feed.Title] | truncateNumber:1000"></span>
-	<span class="count" ng-hide="feed.Outline" ng-bind="unreadCount.feeds[feed.XmlUrl] | truncateNumber:1000"></span>
+	<span class="count" ng-bind="getUnreadCount(feed) | truncateNumber:1000"></span>
 	<span class="title" ng-bind="feed.Title"></span>
 </li>
 </ul>

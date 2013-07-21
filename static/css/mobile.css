@@ -89,12 +89,21 @@ ul.feed-list > li > span.title {
 	display: block;
 	margin-right: 50px;
 }
+ul.feed-list > li.unread {
+	font-weight: bold;
+}
 ul.feed-list > li > span.count {
 	float: right;
 	color: #888;
 }
 ul.feed-list.in > li.feed {
 	padding-left: 30px;
+}
+ul.feed-list > li.empty > p {
+	text-align: center;
+	font-weight: bold;
+	padding: 20px 0;
+	font-size: 16px;
 }
 
 /** story list **/
