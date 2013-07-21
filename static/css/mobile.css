@@ -247,3 +247,15 @@ ul.story-list > li.mark-read p {
 	padding: 0px;
 }
 
+#account {
+	padding: 20px;
+}
+#account h1 {
+	font-size: 24px;
+	margin: 0px;
+}
+#account h2 {
+	font-size: 20px;
+	margin: 0px;
+}
+

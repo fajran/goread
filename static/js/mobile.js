@@ -31,6 +31,7 @@ app.controller('MainController', function($scope, $http) {
 	$scope.title = ''
 	$scope.activeFeed = undefined;
 	$scope.visibility = 'unread';
+	$scope.accountType = 0;
 
 	$scope.setLoaded = function() {
 		$scope.loading = 0;
@@ -572,6 +573,69 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 	$scope.resetScrollLeft = function() {
 		$('#story-list > ul > li').scrollLeft(0);
 	}
+}]);
+
+app.controller('AccountController', ['$scope', function($scope) {
+	$scope.accountType = 0;
+	$scope.account = undefined;
+
+	$scope.showAccount = function() {
+		$scope.setMode('account');
+	}
+
+	$scope.$watch('mode', function(value) {
+		if (value != 'account') return;
+		$scope.reload();
+	});
+
+	$scope.reload = function() {
+		$scope.loadCheckout();
+		$scope.loadAccountData();
+		$scope.updateBackButton();
+	}
+
+	$scope.updateBackButton = function() {
+		$scope.setBackCallback('&laquo; Back', function() {
+			$scope.setMode('feed');
+		});
+	}
+
+	// Account
+
+	$scope.setAccountType = function(type) {
+		$scope.accountType = type;
+	}
+
+	// misc
+
+	$scope.date = function(d) {
+		var m = moment(d);
+		if (!m.isValid()) return d;
+		return m.format('D MMMM YYYY');
+	};
+
+	// stripe
+
+	var checkoutLoaded = false;
+
+	$scope.loadAccountData = function() {
+		if ($scope.account) return;
+		$http.get($('#account').attr('data-url-account'))
+			.success(function(data) {
+				$scope.account = data;
+			});
+	};
+
+	$scope.loadCheckout = function(cb) {
+		if (!checkoutLoaded) {
+			$.getScript("https://checkout.stripe.com/v2/checkout.js", function() {
+				checkoutLoaded = true;
+				if (cb) cb();
+			});
+		} else {
+			if (cb) cb();
+		}
+	};
 }]);
 
 })();

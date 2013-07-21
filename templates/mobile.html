@@ -17,7 +17,12 @@
 <div class="header">
 	<div class="brand">go read</div>
 	{{if .User}}
-	<a href="" id="btn-upgrade" class="btn btn-success btn-small">Upgrade</a>
+	{{if .StripeKey}}
+	<button id="btn-upgrade" class="btn btn-success btn-small"
+		ng-controller="AccountController"
+		ng-hide="accountType"
+		ng-click="showAccount()">Upgrade</button>
+	{{end}}
 	<div class="btn-group info">
 		<a class="btn btn-small dropdown-toggle account" data-toggle="dropdown" href="#">
 			{{.User}} <span class="caret"></span>
@@ -36,10 +41,10 @@
 		ng-bind-html="backButton.label"
 		ng-click="backButtonClick()"></div>
 	<div class="pull-right">
-		<div class="btn btn-small" ng-hide="loading" id="btn-refresh" ng-click="refresh()">
+		<div class="btn btn-small" ng-hide="loading || mode=='account'" id="btn-refresh" ng-click="refresh()">
 			<i class="icon-repeat"></i>
 		</div>
-		<div class="btn-group" ng-hide="loading">
+		<div class="btn-group" ng-hide="loading || mode=='account'">
 			<a class="btn btn-small dropdown-toggle" id="btn-menu" data-toggle="dropdown" href="#">
 				<i class="icon-chevron-down"></i>
 			</a>
@@ -175,6 +180,40 @@
 	<img src="/static/img/google-signin.png" height="42" alt="sign up / log in with google"/>
 </a></p>
 </div><!-- //login -->
+{{end}}
+
+{{if and .User .StripeKey}}
+<!-- account -->
+<div id="account" class="block"
+	data-url-donate="{{url "donate"}}"
+	data-url-charge="{{url "charge"}}"
+	data-url-donate="{{url "donate"}}"
+	data-url-account="{{url "account"}}"
+	data-url-uncheckout="{{url "uncheckout"}}"
+	data-stripe-key="{{.StripeKey}}"
+	ng-init="setAccountType({{.User.Account}});"
+	ng-show="!loading && mode=='account'"
+	ng-controller="AccountController">
+
+<h1>Account</h1>
+<p>Go Read is supported by user subscriptions. Without them, we cannot pay for our servers.</p>
+
+<h2>Reasons to subscribe</h2>
+<ul>
+<li>higher feed update frequency</li>
+<li>funding for new features:
+	<ul>
+	<li>search</li>
+	<li>all items mode for everything, not just one feed</li>
+	<li>HTTPS</li>
+	<li>others</li>
+	</ul>
+</li>
+<li>Go Read servers cost money - without subscriptions we cannot stay online</li>
+<li>Some future features will be subscriber-only</li>
+</ul>
+
+</div><!-- //account -->
 {{end}}
 
 <!-- loading -->
