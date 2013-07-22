@@ -197,7 +197,10 @@ goReadAppModule.controller('GoreadCtrl', function($scope, $http, $timeout, $wind
 		if ($event && !middleClick) {
 			$event.preventDefault();
 		}
-		if (!middleClick && !noClose && i == $scope.currentStory) {
+		if (isClick && $scope.storyCollapse) {
+			$scope.storyCollapse = false;
+		}
+		else if (!middleClick && !noClose && i == $scope.currentStory) {
 			delete $scope.currentStory;
 			return;
 		}
@@ -221,7 +224,9 @@ goReadAppModule.controller('GoreadCtrl', function($scope, $http, $timeout, $wind
 		if (!middleClick && !noOpen) {
 			$scope.currentStory = i;
 		}
-		$scope.markAllRead(story);
+		if ($scope.opts.expanded || !$scope.storyCollapse) {
+			$scope.markAllRead(story);
+		}
 		$location.search({
 			f: story.feed.XmlUrl,
 			s: story.Id
@@ -741,6 +746,7 @@ goReadAppModule.controller('GoreadCtrl', function($scope, $http, $timeout, $wind
 				$scope.readStories[f].push(data.Stories[i]);
 			}
 			$scope.updateStories();
+			$scope.checkLoadNextPage();
 			$scope.applyGetFeed();
 		});
 		$scope.fetching[f] = true;
@@ -970,16 +976,36 @@ goReadAppModule.controller('GoreadCtrl', function($scope, $http, $timeout, $wind
 		$scope.$apply($scope.refresh());
 		return false;
 	});
-	Mousetrap.bind(['j', 'n'], function() {
-		$scope.$apply('next()');
+	Mousetrap.bind('n', function() {
+		$scope.$apply(function() {
+			$scope.storyCollapse = true;
+			$scope.next();
+		});
+		return false;
+	});
+	Mousetrap.bind('j', function() {
+		$scope.$apply(function() {
+			$scope.storyCollapse = false;
+			$scope.next();
+		});
 		return false;
 	});
 	Mousetrap.bind('space', function() {
 		$scope.$apply('next(true)');
 		return false;
 	});
-	Mousetrap.bind(['k', 'p', 'shift+space'], function() {
-		$scope.$apply('prev()');
+	Mousetrap.bind('p', function() {
+		$scope.$apply(function() {
+			$scope.storyCollapse = true;
+			$scope.prev();
+		});
+		return false;
+	});
+	Mousetrap.bind(['k', 'shift+space'], function() {
+		$scope.$apply(function() {
+			$scope.storyCollapse = false;
+			$scope.prev();
+		});
 		return false;
 	});
 	Mousetrap.bind('v', function() {
@@ -1040,6 +1066,15 @@ goReadAppModule.controller('GoreadCtrl', function($scope, $http, $timeout, $wind
 				$scope.markUnread(s);
 			});
 		}
+		return false;
+	});
+	Mousetrap.bind(['o', 'enter'], function() {
+		$scope.$apply(function() {
+			$scope.storyCollapse = !$scope.storyCollapse;
+			if (!$scope.storyCollapse) {
+				$scope.markAllRead($scope.dispStories[$scope.currentStory]);
+			}
+		});
 		return false;
 	});
 
