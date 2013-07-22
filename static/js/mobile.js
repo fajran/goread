@@ -401,6 +401,7 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 	$scope.hasMoreItems = false;
 	$scope.contents = {};
 	$scope.readStatusChanges = [];
+	$scope.keepUnread = [];
 
 	$scope.$watch('$parent.stories', function(value) {
 		if ($scope.mode != 'story') return;
@@ -445,6 +446,7 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 		$scope.contents = {};
 		$scope.activeStory = undefined;
 		$scope.pos = undefined;
+		$scope.keepUnread = [];
 	}
 
 	$scope.prepareFeeds = function() {
@@ -662,16 +664,21 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 
 	$scope.toggleRead = function(story) {
 		$scope.scheduleReadStatus(story);
+		if ($scope.keepUnread.indexOf(story) == -1) {
+			$scope.keepUnread.push(story);
+		}
 	}
 
 	$scope.markItemsRead = function() {
 		for (var i=0; i<$scope.stories.length; i++) {
 			var story = $scope.stories[i];
-			if (story.Unread) {
+			var keep = $scope.keepUnread.indexOf(story) >= 0 && story.Unread;
+			if (!keep && story.Unread) {
 				story.Unread = false;
 				$scope.scheduleReadStatus(story);
 			}
 		}
+		$scope.keepUnread = [];
 		if ($scope.visibility == 'unread') {
 			$scope.reload();
 		}
