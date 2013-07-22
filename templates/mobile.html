@@ -65,10 +65,11 @@
 	{{end}}
 </div>
 
+<!-- content -->
 <div class="content">
 
-{{if .User}}
 <!-- story list -->
+{{if .User}}
 <div id="story-list" class="block" ng-show="!loading && mode=='story'" ng-controller="StoryController">
 <ul class="story-list">
 <li ng-repeat="story in stories"
@@ -137,11 +138,12 @@
 	<p><a href="" ng-click="markItemsRead()">Mark these items as read</a></p>
 </li>
 </ul>
-</div><!-- // story list -->
+</div>
 {{end}}
+<!-- // story list -->
 
-{{if .User}}
 <!-- feed list -->
+{{if .User}}
 <div id="feed-list" class="block" ng-show="!loading && mode=='feed'" ng-controller="FeedController">
 <ul class="feed-list"
 	ng-class="{'top':isTop, 'in':!isTop}">
@@ -168,11 +170,12 @@
 	<span class="title" ng-bind="feed.Title"></span>
 </li>
 </ul>
-</div><!-- //feed-list -->
+</div>
 {{end}}
+<!-- //feed-list -->
 
-{{if not .User}}
 <!-- login -->
+{{if not .User}}
 <div id="login" class="block" ng-show="!loading">
 <h1>Hi, RSS user</h1>
 <p>Go Read is a web-based RSS reader.</p>
@@ -180,11 +183,12 @@
 <p class="signin"><a href="{{url "login-google"}}" class="btn btn-primary">
 	<img src="/static/img/google-signin.png" height="42" alt="sign up / log in with google"/>
 </a></p>
-</div><!-- //login -->
+</div>
 {{end}}
+<!-- //login -->
 
-{{if and .User .StripeKey}}
 <!-- account -->
+{{if and .User .StripeKey}}
 <div id="account" class="block"
 	data-url-donate="{{url "donate"}}"
 	data-url-charge="{{url "charge"}}"
@@ -257,15 +261,18 @@ are sustainable. For example, HTTPS requires purchase of certificates and other
 costs. Donations help fund these features faster. Donations do not mark your
 account as a subscriber &ndash; they are just a way to donate.</p>
 
-</div><!-- //account -->
+</div>
 {{end}}
+<!-- //account -->
 
 <!-- loading -->
 <div id="loading" class="block" ng-show="loading">
 	<p>loading..</p>
 </div>
+<!-- //loading -->
 
-</div><!-- //content -->
+</div>
+<!-- //content -->
 
 <div class="nav bottom">
 	<div class="btn btn-small pull-left back-button"
