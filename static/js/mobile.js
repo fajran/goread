@@ -63,6 +63,7 @@ app.controller('MainController', function($scope, $http) {
 			contents: $('body').data('url-contents'),
 			markRead: $('body').data('url-mark-read'),
 			markUnread: $('body').data('url-mark-unread'),
+			addSubscription: $('body').data('url-add-subscription'),
 		}
 	}
 
@@ -178,6 +179,25 @@ app.controller('MainController', function($scope, $http) {
 		return story.Unread === false;
 	}
 
+	// subscription
+
+	$scope.addSubscription = function() {
+		var url = prompt('Enter URL of a feed');
+		url = $.trim(url);
+		if (url === '') return;
+
+		$scope.loading++;
+		$scope.http('POST', $scope.url.addSubscription, {
+				url: url
+			})
+			.success(function(data) {
+				$scope.loadFeeds();
+			})
+			.error(function(data) {
+				alert('Error: ' + data);
+				$scope.loading--;
+			});
+	}
 });
 
 app.controller('FeedController', function($scope) {

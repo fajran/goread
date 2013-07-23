@@ -11,6 +11,7 @@
 	data-url-contents="{{url "get-contents"}}"
 	data-url-mark-read="{{url "mark-read"}}"
 	data-url-mark-unread="{{url "mark-unread"}}"
+	data-url-add-subscription="{{url "add-subscription"}}"
 	ng-controller="MainController"
 	ng-init="init()">
 
@@ -57,7 +58,9 @@
 				show updated
 			</a></li>
 			<li class="divider"></li>
-			<li><a href=""><i class="icon-"></i> add subscription</a></li>
+			<li ng-click="addSubscription()"><a href="">
+				<i class="icon-"></i> add subscription
+			</a></li>
 			</ul>
 		</div>
 	</div>
