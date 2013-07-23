@@ -373,6 +373,86 @@ app.controller('FeedController', function($scope) {
 	}
 });
 
+var StoryStreamFunnel = function($scope) {
+	// combine multiple story streams into one sorted stream
+	this.$scope = $scope;
+}
+
+StoryStreamFunnel.prototype = {
+	reset: function(source, feeds) {
+		var stream = [];
+		for (var i=0; i<feeds.length; i++) {
+			var feed = feeds[i];
+			var url = feed.XmlUrl;
+			if (source[url]) {
+				var stories = source[url];
+				if (!stories.$gr$sorted) {
+					stories.sort(function(a, b) {
+						return b.Date - a.Date;
+					});
+					stories.$gr$sorted = true;
+				}
+				stream.push({feed:feed, stories:stories});
+			}
+		}
+		this.stream = stream;
+
+		var pos = [];
+		for (var i=0; i<stream.length; i++) {
+			pos.push(0);
+		}
+		this.pos = pos;
+	},
+
+	getNext: function(total, callback) {
+		var stream = this.stream;
+		var pos = this.pos;
+		var len = stream.length;
+
+		var showRead = this.$scope.visibility == 'all';
+
+		var stories = [];
+		for (var i=0; i<10; i++) {
+			var next = undefined;
+			var idx = -1;
+			for (var j=0; j<len; j++) {
+				while (pos[j] < stream[j].stories.length) {
+					var story = stream[j].stories[pos[j]];
+					if (this.$scope.isStoryRead(story) && !showRead) {
+						pos[j]++;
+						continue;
+					}
+
+					if (!next) {
+						next = story;
+						next.feed = stream[j].feed;
+						idx = j;
+					}
+					else {
+						if (story.Date > next.Date) {
+							next = story;
+							next.feed = stream[j].feed;
+							idx = j;
+						}
+					}
+					break;
+				}
+			}
+			if (!next) {
+				break;
+			}
+
+			if (next.Unread === undefined) {
+				next.Unread = true; // FIXME get the unread status
+			}
+			stories.push(next);
+			pos[idx]++;
+		}
+
+		callback(stories);
+	}
+}
+
 app.controller('StoryController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 	function collectFeeds(feed) {
 		if (feed.Outline) feed = feed.Outline;
@@ -397,11 +477,11 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 
 	$scope.stories = [];
 	$scope.activeStory = undefined;
-	$scope.pos = undefined;
 	$scope.hasMoreItems = false;
 	$scope.contents = {};
 	$scope.readStatusChanges = [];
 	$scope.keepUnread = [];
+	var stream = new StoryStreamFunnel($scope);
 
 	$scope.$watch('$parent.stories', function(value) {
 		if ($scope.mode != 'story') return;
@@ -456,81 +536,15 @@ app.controller('StoryController', ['$scope', '$http', '$timeout', function($scop
 	}
 
 	$scope.updateStream = function() {
-		var source = $scope.$parent.stories;
-		var stream = [];
-		var feeds = $scope.feeds;
-		for (var i=0; i<feeds.length; i++) {
-			var feed = feeds[i];
-			var url = feed.XmlUrl;
-			if (source[url]) {
-				var stories = source[url];
-				if (!stories.$gr$sorted) {
-					stories.sort(function(a, b) {
-						return b.Date - a.Date;
-					});
-					stories.$gr$sorted = true;
-				}
-				stream.push({feed:feed, stories:stories});
-			}
-		}
-		$scope.stream = stream;
+		stream.reset($scope.$parent.stories, $scope.feeds);
 	}
 
 	$scope.loadNextBatch = function() {
-		var stream = $scope.stream;
-		var len = stream.length;
-
-		var pos = $scope.pos;
-		if (pos === undefined) {
-			pos = [];
-			for (var i=0; i<len; i++) pos.push(0);
-		}
-
-		var showRead = $scope.visibility == 'all';
-
-		var stories = $scope.stories.slice();
-		var hasMore = true;
-		for (var i=0; i<10; i++) {
-			var next = undefined;
-			var idx = -1;
-			for (var j=0; j<len; j++) {
-				while (pos[j] < stream[j].stories.length) {
-					var story = stream[j].stories[pos[j]];
-					if ($scope.isStoryRead(story) && !showRead) {
-						pos[j]++;
-						continue;
-					}
-
-					if (!next) {
-						next = story;
-						next.feed = stream[j].feed;
-						idx = j;
-					}
-					else {
-						if (story.Date > next.Date) {
-							next = story;
-							next.feed = stream[j].feed;
-							idx = j;
-						}
-					}
-					break;
-				}
-			}
-			if (!next) {
-				hasMore = false;
-				break;
-			}
-
-			if (next.Unread === undefined) {
-				next.Unread = true; // FIXME get the unread status
-			}
-			stories.push(next);
-			pos[idx]++;
-		}
-
-		$scope.pos = pos;
-		$scope.stories = stories;
-		$scope.hasMoreItems = hasMore;
+		var count = 10;
+		stream.getNext(count, function(next) {
+			$scope.stories = $scope.stories.concat(next);
+			$scope.hasMoreItems = next.length == count;
+		});
 	}
 
 	$scope.$watch('stories', function(values) {
