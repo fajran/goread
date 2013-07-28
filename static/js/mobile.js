@@ -37,12 +37,64 @@ app.filter('truncateNumber', function() {
 	}
 });
 
+var Stories = function() {
+	this._init();
+}
+
+Stories.prototype = {
+	_init: function() {
+		this.reset();
+	},
+
+	reset: function() {
+		this.items = [];
+	},
+
+	update: function(stories, origin) {
+		// sort stories
+		var items = stories.slice();
+		items.sort(function(a, b) {
+			return b.Date - a.Date;
+		});
+		for (var i=0; i<items.length; i++) {
+			items[i]._origin = {origin: true};
+		}
+
+		// merge to the current list
+		var pc = 0;
+		var pn = 0;
+		while (true) {
+			var curr = this.items[pc];
+			var next = items[pn];
+			if (!next) break;
+
+			if (curr && (curr.Id === next.Id)) {
+				pc++;
+				pn++;
+				// merge the origin
+				for (k in next._origin) {
+					curr._origin[k] = true;
+				}
+			}
+			else if (curr && (curr.Date > next.Date)) {
+				pc++;
+			}
+			else {
+				this.items.splice(pc, 0, next);
+				pc++;
+				pn++;
+			}
+		}
+	}
+}
+
 app.controller('MainController', function($scope, $http) {
 	$scope.loading = 1;
 	$scope.title = ''
 	$scope.activeFeed = undefined;
 	$scope.visibility = 'unread';
 	$scope.accountType = 0;
+	$scope.stories = {};
 
 	$scope.setLoaded = function() {
 		$scope.loading = 0;
@@ -79,6 +131,29 @@ app.controller('MainController', function($scope, $http) {
 		});
 	}
 
+	function updateStories(opml, stories) {
+		var update = function(url) {
+			if (!$scope.stories[url]) {
+				$scope.stories[url] = new Stories();
+			}
+			if (stories[url]) {
+				$scope.stories[url].update(stories[url])
+			}
+		}
+
+		for (var i=0; i<opml.length; i++) {
+			var feed = opml[i];
+			if (feed.Outline) {
+				for (var j=0; j<feed.Outline.length; j++) {
+					update(feed.Outline[j].XmlUrl);
+				}
+			}
+			else {
+				update(feed.XmlUrl);
+			}
+		}
+	}
+
 	$scope.refresh = function(cb) {
 		cb = cb || function() {};
 
@@ -86,7 +161,7 @@ app.controller('MainController', function($scope, $http) {
 		$http.get($scope.url.feeds)
 			.success(function(data) {
 				$scope.opml = data.Opml;
-				$scope.stories = data.Stories;
+				updateStories(data.Opml, data.Stories);
 
 				$scope.loading--;
 				cb();
@@ -269,7 +344,7 @@ app.controller('FeedController', function($scope) {
 				for (var j=0; j<feed.Outline.length; j++) {
 					var child = feed.Outline[j];
 					var url = child.XmlUrl;
-					var count = countUnread($scope.stories[url]);
+					var count = countUnread($scope.stories[url].items);
 					unread.all += count;
 					unread.folders[feed.Title] += count;
 					unread.feeds[url] = count;
@@ -277,7 +352,7 @@ app.controller('FeedController', function($scope) {
 			}
 			else {
 				var url = feed.XmlUrl;
-				var count = countUnread($scope.stories[url]);
+				var count = countUnread($scope.stories[url].items);
 				unread.all += count;
 				unread.feeds[url] = count;
 			}
@@ -384,8 +459,8 @@ StoryStreamFunnel.prototype = {
 		for (var i=0; i<feeds.length; i++) {
 			var feed = feeds[i];
 			var url = feed.XmlUrl;
-			if (source[url]) {
-				var stories = source[url];
+			if (source[url] && source[url].items) {
+				var stories = source[url].items;
 				if (!stories.$gr$sorted) {
 					stories.sort(function(a, b) {
 						return b.Date - a.Date;
