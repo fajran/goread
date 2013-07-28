@@ -461,12 +461,6 @@ StoryStreamFunnel.prototype = {
 			var url = feed.XmlUrl;
 			if (source[url] && source[url].items) {
 				var stories = source[url].items;
-				if (!stories.$gr$sorted) {
-					stories.sort(function(a, b) {
-						return b.Date - a.Date;
-					});
-					stories.$gr$sorted = true;
-				}
 				stream.push({feed:feed, stories:stories});
 			}
 		}
